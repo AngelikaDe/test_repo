@@ -5,7 +5,6 @@ pipeline {
             steps {
                 // Симуляция процесса сборки
                 echo 'Building the project...'
-            }
             post {
                 always {
                     script {
@@ -17,6 +16,7 @@ pipeline {
                         echo 'Cleaning up resources for Build stage...'
                     }
                 }
+            }
             }
         }
         stage('Test') {
