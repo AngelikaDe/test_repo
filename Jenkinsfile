@@ -8,17 +8,16 @@ pipeline {
             }
             post {
                 always {
-                    script{
-                        echo 'Cleaning up...'
+                    script {
+                        echo 'Always cleaning up after Build stage...'
                     }
                 }
                 cleanup {
-                    script{
-                        echo 'Cleaning up...'
+                    script {
+                        echo 'Cleaning up resources for Build stage...'
                     }
                 }
             }
-        }
         }
         stage('Test') {
             steps {
