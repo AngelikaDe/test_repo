@@ -3,7 +3,6 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                // Клонирование репозитория
             }
         }
         
