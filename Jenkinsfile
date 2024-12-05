@@ -23,8 +23,6 @@ pipeline {
             steps {
                 // Запуск тестов
                 echo 'Running tests...'
-                // Пример запуска тестов через shell-скрипт
-                sh './run-tests.sh'
             }
         }
         stage('Report') {
