@@ -5,7 +5,7 @@ pipeline {
             steps {
                 // Симуляция процесса сборки
                 echo 'Building the project...'
-            post {
+             post {
                 always {
                     script {
                         echo 'Always cleaning up after Build stage...'
