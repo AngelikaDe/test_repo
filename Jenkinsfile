@@ -4,7 +4,6 @@ pipeline {
         stage('Checkout') {
             steps {
                 // Клонирование репозитория
-                git branch: 'main', url: 'https://github.com/your-repository.git'
             }
         }
         
@@ -13,6 +12,19 @@ pipeline {
                 // Симуляция процесса сборки
                 echo 'Building the project...'
             }
+            post {
+                always {
+                    script{
+                        echo 'Cleaning up...'
+                    }
+                }
+                cleanup {
+                    script{
+                        echo 'Cleaning up...'
+                    }
+                }
+            }
+        }
         }
         stage('Test') {
             steps {
