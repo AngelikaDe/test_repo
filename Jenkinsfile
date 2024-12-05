@@ -7,6 +7,7 @@ pipeline {
                 git branch: 'main', url: 'https://github.com/your-repository.git'
             }
         }
+        
         stage('Build') {
             steps {
                 // Симуляция процесса сборки
