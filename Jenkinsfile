@@ -5,11 +5,25 @@ pipeline {
             steps {
             }
         }
+        
         stage('Build') {
             steps {
                 // Симуляция процесса сборки
                 echo 'Building the project...'
             }
+            post {
+                always {
+                    script{
+                        echo 'Cleaning up...'
+                    }
+                }
+                cleanup {
+                    script{
+                        echo 'Cleaning up...'
+                    }
+                }
+            }
+        }
         }
         stage('Test') {
             steps {
