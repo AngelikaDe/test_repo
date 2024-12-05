@@ -3,8 +3,6 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                // Клонирование репозитория
-                git branch: 'main', url: 'https://github.com/your-repository.git'
             }
         }
         stage('Build') {
