@@ -1,11 +1,6 @@
 pipeline {
     agent any
     stages {
-        stage('Checkout') {
-            steps {
-            }
-        }
-        
         stage('Build') {
             steps {
                 // Симуляция процесса сборки
