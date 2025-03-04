@@ -3,12 +3,7 @@ pipeline {
     stages {
         stage('Start') {
             steps {
-                echo "Pipeline запущен!"
-            }
-        }
-        stage('Checkout') {
-            steps {
-                echo "Начинаем Checkout..."
+                echo "Jenkinsfile загружен и выполняется!"
             }
         }
     }
