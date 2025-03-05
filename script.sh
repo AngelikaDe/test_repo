@@ -50,41 +50,41 @@ process_file() {
     cp "$preprod_file" "$perf_file"
 
     echo "Заменяем 'preprod' → 'perf' в $perf_file"
-    sed -i '' 's/preprod/perf/g' "$perf_file" 
+    sed -i 's/preprod/perf/g' "$perf_file" 
 
     # Восстанавливаем ресурсы, если они есть в файле
     echo "Восстанавливаем ресурсы..."
 
     if [[ -n "$limits_memory" ]]; then
-        grep -n '^[ \t]*memory' "$perf_file" | head -n 1 | cut -d: -f1 | xargs -I {} sed -i '' '{}s/^\([ \t]*memory:\).*/\1 '"$limits_memory"'/' "$perf_file"
+        grep -n '^[ \t]*memory' "$perf_file" | head -n 1 | cut -d: -f1 | xargs -I {} sed -i '{}s/^\([ \t]*memory:\).*/\1 '"$limits_memory"'/' "$perf_file"
     fi
 
     if [[ -n "$limits_cpu" ]]; then
-        grep -n '^[ \t]*cpu' "$perf_file" | head -n 1 | cut -d: -f1 | xargs -I {} sed -i '' '{}s/^\([ \t]*cpu:\).*/\1 '"$limits_cpu"'/' "$perf_file"
+        grep -n '^[ \t]*cpu' "$perf_file" | head -n 1 | cut -d: -f1 | xargs -I {} sed -i '{}s/^\([ \t]*cpu:\).*/\1 '"$limits_cpu"'/' "$perf_file"
     fi
 
     if [[ -n "$requests_cpu" ]]; then
-        grep -n '^[ \t]*cpu' "$perf_file" | head -n 2 | tail -n 1 |cut -d: -f1 | xargs -I {} sed -i '' '{}s/^\([ \t]*cpu:\).*/\1 '"$requests_cpu"'/' "$perf_file"
+        grep -n '^[ \t]*cpu' "$perf_file" | head -n 2 | tail -n 1 |cut -d: -f1 | xargs -I {} sed -i '{}s/^\([ \t]*cpu:\).*/\1 '"$requests_cpu"'/' "$perf_file"
     fi
 
     if [[ -n "$requests_memory" ]]; then
-        grep -n '^[ \t]*memory' "$perf_file" | head -n 2 | tail -n 1 | cut -d: -f1 | xargs -I {} sed -i '' '{}s/^\([ \t]*memory:\).*/\1 '"$requests_memory"'/' "$perf_file"
+        grep -n '^[ \t]*memory' "$perf_file" | head -n 2 | tail -n 1 | cut -d: -f1 | xargs -I {} sed -i '{}s/^\([ \t]*memory:\).*/\1 '"$requests_memory"'/' "$perf_file"
     fi
 
     if [[ -n "$loadbalancerIP" ]]; then
-        grep -n '^[ \t]*loadbalancerIP' "$perf_file" | head -n 1 | cut -d: -f1 | xargs -I {} sed -i '' '{}s/^\([ \t]*loadbalancerIP:\).*/\1 '"$loadbalancerIP"'/' "$perf_file"
+        grep -n '^[ \t]*loadbalancerIP' "$perf_file" | head -n 1 | cut -d: -f1 | xargs -I {} sed -i '{}s/^\([ \t]*loadbalancerIP:\).*/\1 '"$loadbalancerIP"'/' "$perf_file"
     fi
 
     if [[ -n "$minimum_idle" ]]; then
-        grep -n '^[ \t]*minimum-idle' "$perf_file" | head -n 1 | cut -d: -f1 | xargs -I {} sed -i '' '{}s/^\([ \t]*minimum-idle:\).*/\1 '"$minimum_idle"'/' "$perf_file"
+        grep -n '^[ \t]*minimum-idle' "$perf_file" | head -n 1 | cut -d: -f1 | xargs -I {} sed -i '{}s/^\([ \t]*minimum-idle:\).*/\1 '"$minimum_idle"'/' "$perf_file"
     fi
 
     if [[ -n "$maximum_pool_size" ]]; then
-        grep -n '^[ \t]*maximum-pool-size' "$perf_file" | head -n 1 | cut -d: -f1 | xargs -I {} sed -i '' '{}s/^\([ \t]*maximum-pool-size:\).*/\1 '"$maximum_pool_size"'/' "$perf_file"
+        grep -n '^[ \t]*maximum-pool-size' "$perf_file" | head -n 1 | cut -d: -f1 | xargs -I {} sed -i '{}s/^\([ \t]*maximum-pool-size:\).*/\1 '"$maximum_pool_size"'/' "$perf_file"
     fi
 
     if [[ -n "$uri" ]]; then
-        grep -n '^[ \t]*uri' "$perf_file" | head -n 1 | cut -d: -f1 | xargs -I {} sed -i '' '{}s/^\([ \t]*uri:\).*/\1 '"$uri"'/' "$perf_file"
+        grep -n '^[ \t]*uri' "$perf_file" | head -n 1 | cut -d: -f1 | xargs -I {} sed -i '{}s/^\([ \t]*uri:\).*/\1 '"$uri"'/' "$perf_file"
     fi
 
     echo "Файл обновлен: $perf_file"
