@@ -1,5 +1,5 @@
 #!/bin/bash
-
+set +x
 # Функция обработки файлов
 process_file() {
     local preprod_file="$1"
