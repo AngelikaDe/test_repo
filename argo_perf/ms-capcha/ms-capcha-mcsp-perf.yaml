@@ -9,7 +9,7 @@ type: application
 environment: perf
 replicaCount: 2
 image:
-  repository: myregistry_perf.com
+  repository: myregistry.com
   tag: latest
   pullPolicy: IfNotPresent
 service:
