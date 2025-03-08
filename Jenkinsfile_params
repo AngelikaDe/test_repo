@@ -1,30 +1,88 @@
+properties([
+    parameters([
+        [$class: 'ChoiceParameter', 
+            choiceType: 'PT_SINGLE_SELECT', 
+            description: 'Select the Env Name from the Dropdown List', 
+            filterLength: 1, 
+            filterable: true, 
+            name: 'Env', 
+            randomName: 'choice-parameter-5631314439613978', 
+            script: [
+                $class: 'GroovyScript', 
+                fallbackScript: [
+                    classpath: [], 
+                    sandbox: false, 
+                    script: 
+                        'return[\'Could not get Env\']'
+                ], 
+                script: [
+                    classpath: [], 
+                    sandbox: false, 
+                    script: 
+                        'return["Dev","QA","Stage","Prod"]'
+                ]
+            ]
+        ], 
+        [$class: 'CascadeChoiceParameter', 
+            choiceType: 'PT_SINGLE_SELECT', 
+            description: 'Select the Server from the Dropdown List', 
+            filterLength: 1, 
+            filterable: true, 
+            name: 'Server', 
+            randomName: 'choice-parameter-5631314456178619', 
+            referencedParameters: 'Env', 
+            script: [
+                $class: 'GroovyScript', 
+                fallbackScript: [
+                    classpath: [], 
+                    sandbox: false, 
+                    script: 
+                        'return[\'Could not get Environment from Env Param\']'
+                ], 
+                script: [
+                    classpath: [], 
+                    sandbox: false, 
+                    script: 
+                        ''' if (Env.equals("Dev")){
+                                return["devaaa001","devaaa002","devbbb001","devbbb002","devccc001","devccc002"]
+                            }
+                            else if(Env.equals("QA")){
+                                return["qaaaa001","qabbb002","qaccc003"]
+                            }
+                            else if(Env.equals("Stage")){
+                                return["staaa001","stbbb002","stccc003"]
+                            }
+                            else if(Env.equals("Prod")){
+                                return["praaa001","prbbb002","prccc003"]
+                            }
+                        '''
+                ]
+            ]
+        ]
+    ])
+])
+
 pipeline {
-    agent any
-
-    parameters {
-     choice name: 'MC_name', choices: ['mc-admin', 'mc-alm', 'mc-relam']
-     string(name: 'TAG', description: 'TAG')
-     string(name: 'HASH', description: 'HASH')
-     string(name: 'value1', defaultValue: '', description: 'Input 1')
-     string(name: 'value2', defaultValue: '', description: 'Input 2')
-     string(name: 'value3', defaultValue: '', description: 'Input 3')
-    }
-
-    stages {
-        stage('Print Parameters') {
-            steps {
-                script {
-                    echo "Выбраны параметры: ${params.MC_name}, ${params.TAG}, ${params.HASH}"
-                    def input1 = params.value1
-                    def input2 = params.value2
-                    def input3 = params.value3
-
-                    echo "Value 1: ${input1}"
-                    echo "Value 2: ${input2}"
-                    echo "Value 3: ${input3}"
-                }
-            }
-        }
-    }
+  environment {
+         vari = ""
+  }
+  agent any
+  stages {
+      stage ("Example") {
+        steps {
+         script{
+          echo 'Hello'
+          echo "${params.Env}"
+          echo "${params.Server}"
+          if (params.Server.equals("Could not get Environment from Env Param")) {
+              echo "Must be the first build after Pipeline deployment.  Aborting the build"
+              currentBuild.result = 'ABORTED'
+              return
+          }
+          echo "Crossed param validation"
+        } }
+      }
+  }
 }
+Even you can use "Active Choices Reactive Reference Parameter" with below definitions and rest of the code, follow as in above example.
 
