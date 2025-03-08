@@ -1,19 +1,17 @@
 pipeline {
     agent any
 
-     environment {
-        VERSION_PARAMS = generateChoices()  // Assign the generated string here
-    }
-
     parameters {
-        string(name: 'VERSION_PARAMS', description: 'Generated parameters') // No defaultValue here
+     choice name: 'MC-name', choices: ['mc-admin', 'mc-alm', 'mc-relam']
+     string(name: 'TAG', description: 'TAG')
+     string(name: 'HASH', description: 'HASH')
     }
 
     stages {
         stage('Print Parameters') {
             steps {
                 script {
-                    echo "Выбраны параметры: ${params.VERSION_PARAMS}"
+                    echo "Выбраны параметры: ${params.MC-name}, ${TAG}, ${HASH}"
                 }
             }
         }
