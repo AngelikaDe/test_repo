@@ -1,30 +1,15 @@
 pipeline {
     agent any
+   parameters {
+        string(name: 'NAME')
+        string(name: 'TAG')
+        string(name: 'HASH')
+    }
     stages {
         stage('User Input') {
             steps {
                 script {
-                    def versions = []
-                    def versionCount = input(
-                        message: 'Сколько версий хотите ввести?',
-                        parameters: [string(name: 'COUNT', defaultValue: '1', description: 'Введите количество версий')]
-                    )
-
-                    versionCount = versionCount.toString().toInteger()  // Преобразуем в Integer явно
-
-                    for (int i = 1; i <= versionCount; i++) {
-                        def params = input(
-                            message: "Введите данные для версии ${i}",
-                            parameters: [
-                                string(name: "NAME_${i}", description: "Название версии"),
-                                string(name: "TAG_${i}", description: "Тег версии"),
-                                string(name: "HASH_${i}", description: "Хеш версии")
-                            ]
-                        )
-                        versions << params
-                    }
-
-                    echo "Введённые версии: ${versions}"
+                    echo "Введённые версии"
                 }
             }
         }
