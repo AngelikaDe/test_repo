@@ -6,7 +6,7 @@ pipeline {
         choice(
             name: 'VERSION_PARAMS',
             description: 'Сгенерированные параметры',
-            choices: generateChoices()
+            defaultValue: generateChoices()
         )
     }
 
@@ -25,9 +25,7 @@ def generateChoices() {
     def count = env.COUNT ? env.COUNT.toInteger() : 2
     def params = []
     for (int i = 1; i <= count; i++) {
-        params.add("NAME_${i}")
-        params.add("TAG_${i}")
-        params.add("HASH_${i}")
+        params.add("NAME_${i}:TAG_${i}:HASH_${i}")
     }
-    return params
+    return params.join(', ')  // String output, not a list
 }
