@@ -18,11 +18,3 @@ pipeline {
     }
 }
 
-def generateChoices() {
-    def count = env.COUNT ? env.COUNT.toInteger() : 2
-    def params = []
-    for (int i = 1; i <= count; i++) {
-        params.add("NAME_${i}:TAG_${i}:HASH_${i}")
-    }
-    return params.join(', ')  // Convert list to a single string
-}
