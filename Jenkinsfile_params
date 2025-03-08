@@ -5,6 +5,9 @@ pipeline {
      choice name: 'MC_name', choices: ['mc-admin', 'mc-alm', 'mc-relam']
      string(name: 'TAG', description: 'TAG')
      string(name: 'HASH', description: 'HASH')
+     string(name: 'value1', defaultValue: '', description: 'Input 1')
+     string(name: 'value2', defaultValue: '', description: 'Input 2')
+     string(name: 'value3', defaultValue: '', description: 'Input 3')
     }
 
     stages {
