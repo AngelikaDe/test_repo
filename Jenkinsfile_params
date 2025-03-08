@@ -5,8 +5,20 @@ pipeline {
      choice name: 'MC_name', choices: ['mc-admin', 'mc-alm', 'mc-relam']
      string(name: 'TAG', description: 'TAG')
      string(name: 'HASH', description: 'HASH')
-     string(name: 'value1', defaultValue: '', description: 'Input 1')
-     string(name: 'value2', defaultValue: '', description: 'Input 2')
-     string(name: 'value3', defaultValue: '', description: 'Input 3')
+    }
+     stages {
+            stage('Get Inputs') {
+                steps {
+                    script {
+                        def input1 = params.value1
+                        def input2 = params.value2
+                        def input3 = params.value3
+    
+                        echo "Value 1: ${input1}"
+                        echo "Value 2: ${input2}"
+                        echo "Value 3: ${input3}"
+                    }
+                }
+            }
     }
 }
