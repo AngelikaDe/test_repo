@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     parameters {
-     choice name: 'MC-name', choices: ['mc-admin', 'mc-alm', 'mc-relam']
+     choice name: 'MC_name', choices: ['mc-admin', 'mc-alm', 'mc-relam']
      string(name: 'TAG', description: 'TAG')
      string(name: 'HASH', description: 'HASH')
     }
@@ -11,7 +11,7 @@ pipeline {
         stage('Print Parameters') {
             steps {
                 script {
-                    echo "Выбраны параметры: ${params.MC-name}, ${params.TAG}, ${params.HASH}"
+                    echo "Выбраны параметры: ${params.MC_name}, ${params.TAG}, ${params.HASH}"
                 }
             }
         }
