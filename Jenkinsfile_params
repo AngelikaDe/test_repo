@@ -9,4 +9,4 @@ pipeline {
      string(name: 'value2', defaultValue: '', description: 'Input 2')
      string(name: 'value3', defaultValue: '', description: 'Input 3')
     }
-
+}
