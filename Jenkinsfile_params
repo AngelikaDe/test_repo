@@ -1,19 +1,25 @@
 pipeline {
     agent any
     parameters {
-        string(name: 'COUNT', defaultValue: '1', description: 'Number of versions')
+        string(name: 'COUNT', defaultValue: '1', description: 'Enter number of versions')
 
-        // Active Choices Script
-        dynamicParameter('DYNAMIC_PARAMS', '''
-            def count = COUNT.toInteger()
-            def params = []
-            for (int i = 1; i <= count; i++) {
-                params.add("NAME_${i}")
-                params.add("TAG_${i}")
-                params.add("HASH_${i}")
-            }
-            return params
-        ''')
+        activeChoice(
+            name: 'VERSION_PARAMS',
+            description: 'Generated parameters',
+            script: [
+                groovyScript: '''
+                    def count = COUNT.toInteger()
+                    def params = []
+                    for (int i = 1; i <= count; i++) {
+                        params.add("NAME_${i}")
+                        params.add("TAG_${i}")
+                        params.add("HASH_${i}")
+                    }
+                    return params
+                ''',
+                fallbackScript: 'return ["Error: Invalid COUNT"]'
+            ]
+        )
     }
     stages {
         stage('Print Parameters') {
@@ -22,9 +28,9 @@ pipeline {
                     def count = params.COUNT.toInteger()
                     for (int i = 1; i <= count; i++) {
                         echo "Processing Version ${i}:"
-                        echo "NAME: ${params["NAME_${i}"]}"
-                        echo "TAG: ${params["TAG_${i}"]}"
-                        echo "HASH: ${params["HASH_${i}"]}"
+                        echo "NAME: ${params["NAME_${i}"] ?: "N/A"}"
+                        echo "TAG: ${params["TAG_${i}"] ?: "N/A"}"
+                        echo "HASH: ${params["HASH_${i}"] ?: "N/A"}"
                     }
                 }
             }
