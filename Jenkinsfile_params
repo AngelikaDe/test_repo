@@ -84,5 +84,4 @@ pipeline {
       }
   }
 }
-Even you can use "Active Choices Reactive Reference Parameter" with below definitions and rest of the code, follow as in above example.
 
