@@ -12,6 +12,13 @@ pipeline {
             steps {
                 script {
                     echo "Выбраны параметры: ${params.MC_name}, ${params.TAG}, ${params.HASH}"
+                    def input1 = params.value1
+                    def input2 = params.value2
+                    def input3 = params.value3
+
+                    echo "Value 1: ${input1}"
+                    echo "Value 2: ${input2}"
+                    echo "Value 3: ${input3}"
                 }
             }
         }
