@@ -1,39 +1,33 @@
 pipeline {
     agent any
-    parameters {
-        string(name: 'COUNT', defaultValue: '1', description: 'Enter number of versions')
 
-        activeChoice(
+    parameters {
+        string(name: 'COUNT', defaultValue: '2', description: 'Количество версий')
+        choice(
             name: 'VERSION_PARAMS',
-            description: 'Generated parameters',
-            script: [
-                groovyScript: '''
-                    def count = COUNT.toInteger()
-                    def params = []
-                    for (int i = 1; i <= count; i++) {
-                        params.add("NAME_${i}")
-                        params.add("TAG_${i}")
-                        params.add("HASH_${i}")
-                    }
-                    return params
-                ''',
-                fallbackScript: 'return ["Error: Invalid COUNT"]'
-            ]
+            description: 'Сгенерированные параметры',
+            choices: generateChoices()
         )
     }
+
     stages {
         stage('Print Parameters') {
             steps {
                 script {
-                    def count = params.COUNT.toInteger()
-                    for (int i = 1; i <= count; i++) {
-                        echo "Processing Version ${i}:"
-                        echo "NAME: ${params["NAME_${i}"] ?: "N/A"}"
-                        echo "TAG: ${params["TAG_${i}"] ?: "N/A"}"
-                        echo "HASH: ${params["HASH_${i}"] ?: "N/A"}"
-                    }
+                    echo "Выбраны параметры: ${params.VERSION_PARAMS}"
                 }
             }
         }
     }
+}
+
+def generateChoices() {
+    def count = env.COUNT ? env.COUNT.toInteger() : 2
+    def params = []
+    for (int i = 1; i <= count; i++) {
+        params.add("NAME_${i}")
+        params.add("TAG_${i}")
+        params.add("HASH_${i}")
+    }
+    return params
 }
