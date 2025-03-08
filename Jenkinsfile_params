@@ -11,7 +11,7 @@ pipeline {
         stage('Print Parameters') {
             steps {
                 script {
-                    echo "Выбраны параметры: ${params.MC-name}, ${TAG}, ${HASH}"
+                    echo "Выбраны параметры: ${params.MC-name}, ${params.TAG}, ${params.HASH}"
                 }
             }
         }
