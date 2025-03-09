@@ -7,7 +7,7 @@ pipeline {
             description: 'Select a repository'
         )
         
-        activeChoiceReactiveReference(
+        activeChoiceReactiveParam(
             name: 'DYNAMIC_REPO',
             choiceType: 'SINGLE_SELECT',
             referencedParameters: 'REPO_NAME',
