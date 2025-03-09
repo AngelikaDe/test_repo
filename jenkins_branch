@@ -1,0 +1,31 @@
+pipeline {
+    agent any
+    parameters {
+        choice(
+            name: 'REPO_NAME',
+            choices: ['repo1', 'repo2', 'repo3'],
+            description: 'Select a repository'
+        )
+
+        gitParameter(
+            name: 'BRANCH_NAME',
+            type: 'PT_BRANCH',
+            branch: '',
+            defaultValue: 'main',
+            selectedValue: 'NONE',
+            quickFilterEnabled: false,
+            useRepository: '${REPO_NAME}',
+            description: 'Select a branch from the selected repository'
+        )
+    }
+    stages {
+        stage('Display Parameters') {
+            steps {
+                script {
+                    echo "Selected Repository: ${params.REPO_NAME}"
+                    echo "Selected Branch: ${params.BRANCH_NAME}"
+                }
+            }
+        }
+    }
+}
