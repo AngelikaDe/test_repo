@@ -1,39 +1,12 @@
 pipeline {
     agent any
-    parameters {
-        choice(
-            name: 'REPO_NAME',
-            choices: ['*test_repo.git', '*calc_app.git'],
-            description: 'Select a repository'
-        )
-        
-        reactiveChoice(
-            name: 'DYNAMIC_REPO',
-            choiceType: 'SINGLE_SELECT',
-            referencedParameters: 'REPO_NAME',
-            script: [
-                classpath: [],
-                sandbox: true,
-                script: 'return [params.REPO_NAME]'
-            ]
-        )
-        
-        gitParameter(
-            name: 'BRANCH_A',
-            type: 'PT_BRANCH',
-            branchFilter: 'origin.*/(.*)',
-            defaultValue: 'master',
-            useRepository: '${DYNAMIC_REPO}',
-            description: 'Select a branch from the selected repository'
-        )
-    }
-    
     stages {
         stage('Show Selected Parameters') {
             steps {
                 script {
-                    echo "Selected Repository: ${params.REPO_NAME}"
-                    echo "Selected Branch: ${params.BRANCH_A}"
+                    echo "${params.repo_name}"
+                    echo "${params.theme}"
+                    echo "${params.branch}"
                 }
             }
         }
