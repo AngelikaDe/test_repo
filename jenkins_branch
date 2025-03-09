@@ -3,7 +3,7 @@ pipeline {
     parameters {
         choice(
             name: 'REPO_NAME',
-            choices: ['repo1', 'repo2', 'repo3'],
+            choices: ['test_repo', 'calc_cpp'],
             description: 'Select a repository'
         )
 
