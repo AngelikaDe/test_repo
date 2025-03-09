@@ -14,7 +14,7 @@ pipeline {
             defaultValue: 'main',
             selectedValue: 'NONE',
             quickFilterEnabled: false,
-            useRepository: '${REPO_NAME}',
+            useRepository: '*${REPO_NAME}.git',
             description: 'Select a branch from the selected repository'
         )
     }
