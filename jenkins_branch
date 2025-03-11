@@ -26,7 +26,10 @@ def updateYamlFiles(name, version, hash) {
 
 pipeline {
     agent any
-        stages {
+    parameters {
+        text(name: 'hash', description: 'ms-branch|tag|hash')
+    }
+    stages {
         stage('Process Updates') {
             steps {
                 script {
