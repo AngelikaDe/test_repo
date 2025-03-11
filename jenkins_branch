@@ -76,8 +76,8 @@ def updateYamlFiles(name, version, hash) {
     echo "Processing file: ${yamlFile}"
 
     sh """
-        sed -i '' 's/^\([ \t]*tag:\)[ \t]*.*/\1 ${version}/'' ${yamlFile}
-        sed -i '' 's/^\([ \t]*hash:\)[ \t]*.*/\1 ${hash}/'' ${yamlFile}
+        sed -i 's/^\\([ \\t]*tag:\\)[ \\t]*.*/\\1 ${version}/' ${yamlFile}
+        sed -i 's/^\([ \t]*hash:\)[ \t]*.*/\1 ${hash}/'' ${yamlFile}
     """
     
     echo "Updated tag and hash in ${yamlFile}"
