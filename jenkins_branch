@@ -1,0 +1,55 @@
+def updateYamlFiles(name, version, hash) {
+    if (!name || !version || !hash) {
+        error "All parameters (name, version, hash) are required."
+    }
+    def dirPath = sh(script: "find argo/ -type d -name '${name}'", returnStdout: true).trim()
+
+    if (!dirPath) {
+        error "Directory '${name}' not found under argo/"
+    }
+    echo "Directory found: ${dirPath}"
+
+    def yamlFile = sh(script: "find ${dirPath} -maxdepth 1 -type f -name '*.yaml'", returnStdout: true).trim()
+
+    if (!yamlFile) {
+        error "No YAML file found in '${dirPath}'"
+    }
+    echo "Processing file: ${yamlFile}"
+
+    sh """
+        sed -i 's/^tag:.*/tag: ${version}/' ${yamlFile}
+        sed -i 's/^hash:.*/hash: ${hash}/' ${yamlFile}
+    """
+    
+    echo "Updated tag and hash in ${yamlFile}"
+}
+
+pipeline {
+    agent any
+        stages {
+        stage('Process Updates') {
+            steps {
+                script {
+                    def updates = params.hash.split('\n')
+                    updates.each { update ->
+                        if (update.trim()) {
+                            def parts = update.split('\\|')
+                            if (parts.size() == 3) {
+                                def name = parts[0]
+                                def version = parts[1]
+                                def hash = parts[2]
+                                echo "Processing update: Name=${name}, Version=${version}, Hash=${hash}"
+                                updateYamlFiles("${name}", "${version}", "${hash}")
+                                
+                            } else {
+                                echo "Skipping invalid update format: ${update}"
+                            }
+                        } else {
+                            echo "Skipping empty line"
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

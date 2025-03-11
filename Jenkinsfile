@@ -1,46 +1,35 @@
 pipeline {
     agent any
     stages {
-        stage('Build') {
+        stage('Start') {
             steps {
-                // Симуляция процесса сборки
-                echo 'Building the project...'
-             post {
-                always {
-                    script {
-                        echo 'Always cleaning up after Build stage...'
+                echo "Jenkinsfile загружен и выполняется!"
+            }
+        }
+        stage('Checkout') {
+            steps {
+                script {
+                    dir('folder1') {
+                        git branch: 'branch1',
+                            credentialsId: 'github_test',
+                            url: 'https://github.com/AngelikaDe/test_repo.git'
+                    }
+
+                    dir('folder2') {
+                        git branch: 'branch2',
+                            credentialsId: 'github_test',
+                            url: 'https://github.com/AngelikaDe/test_repo.git'
                     }
                 }
-                cleanup {
-                    script {
-                        echo 'Cleaning up resources for Build stage...'
-                    }
+            }
+        }
+        stage('List Files') {
+            steps {
+                script {
+                    sh 'ls -l folder1'
+                    sh 'ls -l folder2'
                 }
             }
-            }
-        }
-        stage('Test') {
-            steps {
-                // Запуск тестов
-                echo 'Running tests...'
-            }
-        }
-        stage('Report') {
-            steps {
-                // Генерация отчёта
-                echo 'Generating test report...'
-            }
-        }
-    }
-    post {
-        always {
-            echo 'Pipeline finished!'
-        }
-        success {
-            echo 'Pipeline completed successfully!'
-        }
-        failure {
-            echo 'Pipeline failed!'
         }
     }
 }
