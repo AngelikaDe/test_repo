@@ -1,36 +1,36 @@
-def updateYamlFiles(name, version, hash) {
-    if (!name || !version || !hash) {
-        error "All parameters (name, version, hash) are required."
-    }
-    def dirPath = sh(script: "find argo_perf/ -type d -name '${name}'", returnStdout: true).trim()
-
-    if (!dirPath) {
-        error "Directory '${name}' not found under argo/"
-    }
-    echo "Directory found: ${dirPath}"
-
-    def yamlFile = sh(script: "find ${dirPath} -maxdepth 1 -type f -name '*.yaml'", returnStdout: true).trim()
-
-    if (!yamlFile) {
-        error "No YAML file found in '${dirPath}'"
-    }
-    echo "Processing file: ${yamlFile}"
-
-    sh """
-        sed -i 's/^tag:.*/tag: ${version}/' ${yamlFile}
-        sed -i 's/^hash:.*/hash: ${hash}/' ${yamlFile}
-    """
-    
-    echo "Updated tag and hash in ${yamlFile}"
-}
+globalUserEmail = "angelikademina@yandex.run"
+globalUserName = "Angelika"
 
 pipeline {
+    options {
+        skipDefaultCheckout()
+    }
     agent any
     parameters {
+        choice(name: 'area', choices: ['test', 'preprod'], description: 'Выберите среду')
+        string(name: 'branch', description: 'Branch name')
         text(name: 'hash', description: 'ms-branch|tag|hash')
+        text(name: 'message', description: 'Commit message')
     }
     stages {
-        stage('Process Updates') {
+        stage('Checkout') {
+            steps {
+                dir('devops') {
+                    git credentialsId: 'github_test',
+                        url: 'https://github.com/AngelikaDe/test_repo.git',
+                        branch: 'main'
+                }
+
+                dir("${params.branch}") {
+                    git credentialsId: 'github_test',
+                        url: 'https://github.com/AngelikaDe/test_repo.git',
+                        branch: "${params.area}"
+                    sh "git checkout -b ${params.branch} origin/${params.area}"
+                    echo "Git checkout and new branch '${params.branch}' created"
+                }
+            }
+        }
+        stage('Update Versions') {
             steps {
                 script {
                     def updates = params.hash.split('\n')
@@ -42,17 +42,87 @@ pipeline {
                                 def version = parts[1]
                                 def hash = parts[2]
                                 echo "Processing update: Name=${name}, Version=${version}, Hash=${hash}"
-                                updateYamlFiles("${name}", "${version}", "${hash}")
-                                
+                                updateYamlFiles(name, version, hash)
                             } else {
-                                echo "Skipping invalid update format: ${update}"
+                                error "Skipping invalid update format: ${update}"
                             }
-                        } else {
-                            echo "Skipping empty line"
                         }
                     }
                 }
             }
         }
+        stage('Commit and Push') {
+            steps {
+                script {
+                    gitPush()
+                }
+            }
+        }
+        stage('Create Merge Request') {
+            steps {
+                script {
+                    createPR()
+                }
+            }
+        }
     }
 }
+
+def updateYamlFiles(name, version, hash) {
+    def dirPath = sh(script: "find ${params.branch}/argo_perf/ -type d -name '${name}'", returnStdout: true).trim()
+    def yamlFile = sh(script: "find ${dirPath} -maxdepth 1 -type f -name '*.yaml'", returnStdout: true).trim()
+
+    echo "Processing file: ${yamlFile}"
+
+    sh """
+        sed -i 's/^tag:.*/tag: ${version}/' ${yamlFile}
+        sed -i 's/^hash:.*/hash: ${hash}/' ${yamlFile}
+    """
+    
+    echo "Updated tag and hash in ${yamlFile}"
+}
+
+def gitPush() {
+    sh """
+        git config --global user.name "${globalUserName}"
+        git config --global user.email "${globalUserEmail}"
+        git add .
+        git commit -m "${params.message}"
+        git push origin ${params.branch}
+    """
+}
+
+def createPR() {
+    withCredentials([string(credentialsId: 'github_token', variable: 'TOKEN')]) {
+        sh """
+            curl -X POST -H "Authorization: token $TOKEN" \
+                 -H "Accept: application/vnd.github.v3+json" \
+                 https://api.github.com/repos/AngelikaDe/test_repo/pulls \
+                 -d '{
+                     "title": "Automated PR from ${params.branch}",
+                     "head": "refs/heads/${params.branch}",
+                     "base": "refs/heads/${params.area}",
+                     "body": "${params.message}"
+                 }'
+        """
+    }
+}
+
+
+// def createPR(result, repo) {
+//     def branch = sh(script: "git rev-parse --abbrev-ref HEAD", returnStdout: true).trim()
+//     def prTitle = "Automated PR: ${result}"
+//     def prDescription = "This PR updates ${repo} with result: ${result}"
+    
+//     sh """
+//         curl -X POST -u "username:password" \\
+//         -H "Content-Type: application/json" \\
+//         -d '{
+//             "title": "${prTitle}",
+//             "description": "${prDescription}",
+//             "source": { "branch": { "name": "${branch}" } },
+//             "destination": { "branch": { "name": "branch1" } }
+//         }' \\
+//         https://bitbucket.example.com/rest/api/1.0/projects/your_project/repos/${repo}/pull-requests
+//     """
+// }
