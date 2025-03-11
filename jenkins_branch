@@ -2,7 +2,7 @@ def updateYamlFiles(name, version, hash) {
     if (!name || !version || !hash) {
         error "All parameters (name, version, hash) are required."
     }
-    def dirPath = sh(script: "find argo/ -type d -name '${name}'", returnStdout: true).trim()
+    def dirPath = sh(script: "find argo_perf/ -type d -name '${name}'", returnStdout: true).trim()
 
     if (!dirPath) {
         error "Directory '${name}' not found under argo/"
