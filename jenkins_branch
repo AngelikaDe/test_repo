@@ -80,6 +80,7 @@ def updateYamlFiles(name, version, hash) {
     """
     
     echo "Updated tag and hash in ${yamlFile}"
+    sh "cat ${params.branch}/argo_perf/ms-capcha/ms-capcha-mcsp-preprod.yaml"
 }
 
 def gitPush() {
