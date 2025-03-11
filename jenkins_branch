@@ -88,6 +88,7 @@ def gitPush() {
         ls -la
         git config --global user.name "${globalUserName}"
         git config --global user.email "${globalUserEmail}"
+        git status
         git add .
         git commit -m "${params.message}"
         git push origin ${params.branch}
