@@ -10,7 +10,8 @@ environment: preprod
 replicaCount: 2
 image:
   repository: myregistry.com
-  tag: latest
+  tag: 1.2.4
+  hash: ADSFghdjkfjgdfvzdcsx
   pullPolicy: IfNotPresent
 service:
   type: ClusterIP
