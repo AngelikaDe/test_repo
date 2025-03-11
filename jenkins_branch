@@ -86,7 +86,7 @@ def gitPush() {
     sh """
         cd ${params.branch}
         ls -la
-        ls -la argo_perf/ms-capcha/ms-capcha-mcsp-preprod.yaml
+        cat argo_perf/ms-capcha/ms-capcha-mcsp-preprod.yaml
         git config --global user.name "${globalUserName}"
         git config --global user.email "${globalUserEmail}"
         git status
