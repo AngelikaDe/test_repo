@@ -13,13 +13,13 @@ pipeline {
         text(name: 'message', description: 'Commit message')
     }
     stages {
-        stage('Checkout') {
-            steps {
-                dir('devops') {
-                    git credentialsId: 'github_test',
-                        url: 'https://github.com/AngelikaDe/test_repo.git',
-                        branch: 'main'
-                }
+//        stage('Checkout') {
+//            steps {
+//                dir('devops') {
+ //                   git credentialsId: 'github_test',
+ //                       url: 'https://github.com/AngelikaDe/test_repo.git',
+  //                      branch: 'main'
+//                }
 
                 dir("${params.branch}") {
                     git credentialsId: 'github_test',
