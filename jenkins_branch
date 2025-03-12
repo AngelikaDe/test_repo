@@ -92,6 +92,7 @@ def updateYamlFiles(name, version, hash) {
 def gitPush() {
     sh """
         ls -la ${params.branch}
+        touch ${params.branch}/test.tzt
         cd ${params.branch}
         git config --global user.name "${globalUserName}"
         git config --global user.email "${globalUserEmail}"
