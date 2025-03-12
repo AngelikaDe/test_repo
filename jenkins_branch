@@ -77,7 +77,8 @@ def updateYamlFiles(name, version, hash) {
     echo "Processing file: ${yamlFile}"
 
     sh """
-     ls -la ${dirPath}
+     ls -la ${params.branch}/${dirPath}
+     mv ${params.branch}/${yamlFile} ${params.branch}/${dirPath}/ms.yaml
     """
     
     echo "Updated tag and hash in ${yamlFile}"
