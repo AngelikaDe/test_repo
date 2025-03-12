@@ -90,7 +90,7 @@ def updateYamlFiles(name, version, hash) {
 }
 
 def gitPush() {
-    withCredentials([string(credentialsId: 'github_token', variable: 'TOKEN')]) {
+    withCredentials([string(credentialsId: 'github_test', variable: 'TOKEN')]) {
         sh """
             git config --global user.name "${globalUserName}"
             git config --global user.email "${globalUserEmail}"
