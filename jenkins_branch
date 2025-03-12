@@ -90,17 +90,16 @@ def updateYamlFiles(name, version, hash) {
 }
 
 def gitPush() {
-    sh """
-        ls -la ${params.branch}
-        touch ${params.branch}/test.tzt
-        cd ${params.branch}
-        git config --global user.name "${globalUserName}"
-        git config --global user.email "${globalUserEmail}"
-        git status
-        git add .
-        git commit -m "${params.message}"
-        git push origin ${params.branch}
-    """
+    withCredentials([string(credentialsId: 'github_token', variable: 'TOKEN')]) {
+        sh """
+            git config --global user.name "${globalUserName}"
+            git config --global user.email "${globalUserEmail}"
+            git remote set-url origin https://x-access-token:$TOKEN@github.com/AngelikaDe/test_repo.git
+            git add .
+            git commit -m "${params.message}" || echo "No changes to commit"
+            git push origin ${params.branch}
+        """
+    }
 }
 
 def createPR() {
