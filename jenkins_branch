@@ -73,10 +73,11 @@ def updateYamlFiles(name, version, hash) {
     def dirPath = sh(script: "find argo_perf/ -type d -name '${name}'", returnStdout: true).trim()
     def yamlFile = sh(script: "find ${dirPath} -maxdepth 1 -type f -name '*.yaml'", returnStdout: true).trim()
 
+    echo "Processing folder: ${dirPath}"
     echo "Processing file: ${yamlFile}"
 
     sh """
-        mv ${yamlFile} ms.yaml
+        mv ${yamlFile} ${dirPath}/ms.yaml
     """
     
     echo "Updated tag and hash in ${yamlFile}"
