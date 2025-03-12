@@ -91,9 +91,8 @@ def updateYamlFiles(name, version, hash) {
 
 def gitPush() {
     sh """
+        ls -la ${params.branch}
         cd ${params.branch}
-        ls -la
-        cat argo_perf/ms-capcha/ms-capcha-mcsp-preprod.yaml
         git config --global user.name "${globalUserName}"
         git config --global user.email "${globalUserEmail}"
         git status
