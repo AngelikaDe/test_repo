@@ -94,7 +94,6 @@ def gitPush() {
         sh """
             git config --global user.name "${globalUserName}"
             git config --global user.email "${globalUserEmail}"
-            git remote set-url origin https://x-access-token:$TOKEN@github.com/AngelikaDe/test_repo.git
             git add .
             git commit -m "${params.message}" || echo "No changes to commit"
             git push origin ${params.branch}
