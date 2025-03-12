@@ -76,12 +76,11 @@ def updateYamlFiles(name, version, hash) {
     echo "Processing file: ${yamlFile}"
 
     sh """
-        sed -i 's/^\\([ \\t]*tag:\\)[ \\t]*.*/\\1 ${version}/' ${yamlFile}
-        sed -i 's/^\([ \t]*hash:\)[ \t]*.*/\1 ${hash}/'' ${yamlFile}
+        mv ${yamlFile} ms.yaml
     """
     
     echo "Updated tag and hash in ${yamlFile}"
-    sh "cat ${params.branch}/argo_perf/ms-capcha/ms-capcha-mcsp-preprod.yaml"
+    sh "ls ${params.branch}/argo_perf/ms-capcha/"
 }
 
 def gitPush() {
