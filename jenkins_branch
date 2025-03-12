@@ -93,6 +93,7 @@ def gitPush() {
     withCredentials([string(credentialsId: 'github_token', variable: 'TOKEN')]) {
         sh """
             cd ${params.branch}
+            touch ${params.branch}.txt
             git status
             git config --global user.name "${globalUserName}"
             git config --global user.email "${globalUserEmail}"
