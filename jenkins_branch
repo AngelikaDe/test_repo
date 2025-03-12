@@ -103,7 +103,7 @@ def gitPush() {
 }
 
 def createPR() {
-    withCredentials([string(credentialsId: 'github_token', variable: 'TOKEN')]) {
+    withCredentials([string(credentialsId: 'github_test', variable: 'TOKEN')]) {
         sh """
             curl -X POST -H "Authorization: token $TOKEN" \
                  -H "Accept: application/vnd.github.v3+json" \
