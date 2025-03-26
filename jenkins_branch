@@ -76,8 +76,14 @@ def updateYamlFiles(name, version, hash) {
     echo "Processing folder: ${dirPath}"
     echo "Processing file: ${yamlFile}"
     
-    sh "grep -n '^[ \t]*tag' "$yamlFile" | head -n 1 | cut -d: -f1 | xargs -I {} sed -i '' '{}s/^\([ \t]*tag:[ \t]*\).*/\1'"$version"'/' "$yamlFile""
-    sh "grep -n '^[ \t]*hash' "$yamlFile" | head -n 1 | cut -d: -f1 | xargs -I {} sed -i '' '{}s/^\([ \t]*hash:[ \t]*\).*/\1'"$hash"'/' "$yamlFile""
+    sh """
+        tagLine=\$(grep -n '^[ \t]*tag' "$yamlFile" | head -n 1 | cut -d: -f1)
+        hashLine=\$(grep -n '^[ \t]*hash' "$yamlFile" | head -n 1 | cut -d: -f1)
+    
+        [ ! -z "\$tagLine" ] && sed -i "" "\${tagLine}s/^[ \t]*tag:[ \t]*.*/tag: $version/" "$yamlFile"
+        [ ! -z "\$hashLine" ] && sed -i "" "\${hashLine}s/^[ \t]*hash:[ \t]*.*/hash: $hash/" "$yamlFile"
+    """
+
     echo "Updated tag and hash in ${yamlFile}"
     sh "ls ${params.branch}/argo_perf/ms-capcha/"
 }
