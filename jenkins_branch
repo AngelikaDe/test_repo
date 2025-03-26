@@ -75,16 +75,9 @@ def updateYamlFiles(name, version, hash) {
 
     echo "Processing folder: ${dirPath}"
     echo "Processing file: ${yamlFile}"
-
-    if (yamlFile) {
-        def yamlFileName = yamlFile.tokenize('/')[-1]
-        def newYamlPath = "${dirPath}/ms.yaml"
-        sh """
-            ls -la ${params.branch}/${dirPath}
-            mv ${yamlFile} ${newYamlPath}
-        """
-    }
     
+    sh "grep -n '^[ \t]*tag' "$yamlFile" | head -n 1 | cut -d: -f1 | xargs -I {} sed -i '' '{}s/^\([ \t]*tag:[ \t]*\).*/\1'"$version"'/' "$yamlFile""
+    sh "grep -n '^[ \t]*hash' "$yamlFile" | head -n 1 | cut -d: -f1 | xargs -I {} sed -i '' '{}s/^\([ \t]*hash:[ \t]*\).*/\1'"$hash"'/' "$yamlFile""
     echo "Updated tag and hash in ${yamlFile}"
     sh "ls ${params.branch}/argo_perf/ms-capcha/"
 }
